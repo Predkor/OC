@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Manager</title>
+    <script>
+        async function loadProcesses() {
+            const response = await fetch('http://localhost:8080/processes');
+            const processes = await response.text();
+            document.getElementById("process-list").innerHTML = processes;
+        }
+
+        async function killProcess() {
+            const pid = document.getElementById("pid-input").value;
+            if (!pid) {
+                alert("Введите PID процесса");
+                return;
+            }
+            const response = await fetch(`http://localhost:8080/kill?pid=${pid}`);
+            const result = await response.text();
+            alert(result);
+            loadProcesses();  // Обновляем список процессов
+        }
+
+        window.onload = loadProcesses;
+    </script>
+</head>
+<body>
+    <h1>Управление процессами</h1>
+    <div>
+        <h2>Список процессов:</h2>
+        <div id="process-list"></div>
+    </div>
+    <div>
+        <h2>Завершение процесса:</h2>
+        <label for="pid-input">Введите PID процесса:</label>
+        <input type="text" id="pid-input" />
+        <button onclick="killProcess()">Завершить</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Просмотр ELF-файлов</h1>
+
+    <div class="control-panel">
+        <form action="/upload" id="formfile">
+            <input type="file" name="input_file" id="inputFile">
+    
+            <input type="submit" value="Просмотреть">
+        </form>
+    
+        <button id="btn-clear">Очистить</button>
+    </div> 
+
+    <div class="content_block">
+        <p id="content_file"></p>
+    </div>
+
+    <style>
+        #btn-clear {
+            margin-top: 15px;
+        }
+    </style>
+
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();  // Останавливаем стандартную отправку формы
+            const formData = new FormData(form);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('elfContents').textContent = data;  // Выводим содержимое файла
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+</body>
+</html>

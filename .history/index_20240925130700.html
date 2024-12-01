@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Диспетчер задач</h1>
+    <div class="process">
+        <div class="process-control">
+            <form action="/killproc">
+                <label>
+                    PID <input type="text">
+                </label>
+    
+                <input type="submit" value="Kill">
+            </form>
+        </div>
+    
+        <div class="process-table">
+            <table id="table-all-processes">
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function getProcessesList() {
+            const url = "http://localhost:8080/processes";
+
+            try{
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                console.log(json);
+            } catch (e) {
+                console.log(`Error: ${e}`);
+            }
+        }    
+        
+        onload.getProcessesList();
+        setInterval(getProcessesList, 50000);
+
+    </script>
+</body>
+</html>

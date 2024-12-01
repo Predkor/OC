@@ -1,0 +1,24 @@
+#include <iostream>
+#include <crow.h>
+
+#include <fstream>
+#include <sstream>
+
+#define PORT 8080
+#define LOCALHOST "127.0.0.1"
+
+using namespace std;
+
+string readHTMLFIle() {
+    
+}
+
+int main() {
+    crow::SimpleApp app;
+
+    
+
+    app.bindaddr(LOCALHOST).port(PORT).multithreaded().run();
+
+    return 0;
+}

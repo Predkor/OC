@@ -1,0 +1,5 @@
+CC=g++
+FLAGS=-lpthread
+
+build:
+	$(CC) $(FLAGS) -o server server.cpp

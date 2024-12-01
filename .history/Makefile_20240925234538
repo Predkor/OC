@@ -1,0 +1,13 @@
+CC=g++
+FLAGS=-lpthread -lelf
+
+all: build start
+
+build:
+	$(CC) $(FLAGS) -o server server.cpp
+
+start:
+	./server
+
+clean:
+	rm server

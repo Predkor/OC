@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section class="manager-block">
+        <h1>Диспетчер задач</h1>
+        <div class="process">
+            <div class="process-control">
+                <form action="/killproc">
+                    <label>
+                        PID <input type="text">
+                    </label>
+        
+                    <input type="submit" value="Kill">
+                </form>
+            </div>
+        
+            <div class="process-table">
+                <table id="table-all-processes"></table>
+            </div>
+        </div>
+    </section>
+    
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #table-all-processes, th, td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 10px;
+        }
+
+        td {
+            word-break: break-all;
+        }
+        
+        .manager-block {
+            margin: 20px;
+        }
+
+        .process {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            margin-top: 20px;
+        }
+
+    </style>
+
+    <script>
+        async function getProcessesList() {
+            const url = "http://localhost:8080/processes";
+
+            try{
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                viewProcessList(json);
+            } catch (e) {
+                console.log(`Error: ${e}`);
+            }
+        }    
+        
+        getProcessesList();
+        setInterval(getProcessesList, 50000);
+
+        function viewProcessList(data) {
+            let table = document.querySelector('#table-all-processes');
+            
+            table.innerHTML = `
+            <tr>
+                <th>PID</th>
+                <th>USER</th>
+                <th>PR</th>
+                <th>NI</th>
+                <th>S</th>
+                <th>MEM</th>
+                <th>COMMAND</th>
+            </tr>`;
+
+            let arrayCategory = ["pid", "user", "pr", "ni", "s", "VmSize", "command"];
+
+            data.forEach(item => {
+                if (item.command !== '') {
+                    let row = table.insertRow();
+                    for (let i = 0; i < arrayCategory.length; i++) {
+                        row.insertCell(i).textContent = item[arrayCategory[i]];
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
